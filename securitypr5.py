@@ -30,7 +30,7 @@ class KnapsackCryptosystem:
     def mod_inverse(self, t, m):
         gcd, x, _ = self.extended_gcd(t, m)
         if gcd != 1:
-            raise ValueError("t and m are not coprime!")
+            raise ValueError("t і m не є взаємно простими!")
         return x % m
 
     def generate_keys(self, n=8):
@@ -70,10 +70,10 @@ class KnapsackApp:
     def __init__(self, root):
         self.crypto = KnapsackCryptosystem()
         self.root = root
-        self.root.title("Knapsack Cryptosystem")
+        self.root.title("Криптосистема Рюкзака")
 
         # Поле для введення тексту
-        self.text_label = tk.Label(root, text="Введіть текст:")
+        self.text_label = tk.Label(root, text="Введіть текст для шифрування або розшифрування:")
         self.text_label.pack()
         self.text_entry = tk.Text(root, height=5, width=40)
         self.text_entry.pack()
@@ -123,7 +123,7 @@ class KnapsackApp:
     def decrypt_message(self):
         encrypted = self.result_text.get("1.0", tk.END).strip()
         if not encrypted:
-            messagebox.showerror("Помилка", "Будь ласка, шифруйте текст перед розшифруванням.")
+            messagebox.showerror("Помилка", "Будь ласка, спершу шифруйте текст перед розшифруванням.")
             return
         try:
             encrypted_blocks = list(map(int, encrypted.strip('[]').split(',')))
