@@ -77,6 +77,7 @@ class KnapsackApp:
         self.text_label.pack()
         self.text_entry = tk.Text(root, height=5, width=40)
         self.text_entry.pack()
+        self.add_shortcuts(self.text_entry)
 
         # Кнопка генерації ключів
         self.key_button = tk.Button(root, text="Згенерувати ключі", command=self.generate_keys)
@@ -87,6 +88,7 @@ class KnapsackApp:
         self.public_key_label.pack()
         self.public_key_text = tk.Text(root, height=2, width=40, state='disabled')
         self.public_key_text.pack()
+        self.add_shortcuts(self.public_key_text)
 
         # Кнопки шифрування та розшифрування
         self.encrypt_button = tk.Button(root, text="Шифрувати", command=self.encrypt_message)
@@ -100,6 +102,33 @@ class KnapsackApp:
         self.result_label.pack()
         self.result_text = tk.Text(root, height=5, width=40, state='disabled')
         self.result_text.pack()
+        self.add_shortcuts(self.result_text)
+
+    def add_shortcuts(self, widget):
+        """ Додає підтримку комбінацій Ctrl+C і Ctrl+V для полів введення тексту """
+        widget.bind("<Control-c>", self.copy_text)
+        widget.bind("<Control-v>", self.paste_text)
+
+    def copy_text(self, event):
+        """ Копіює виділений текст у буфер обміну """
+        widget = event.widget
+        try:
+            selected_text = widget.get(tk.SEL_FIRST, tk.SEL_LAST)
+            self.root.clipboard_clear()
+            self.root.clipboard_append(selected_text)
+        except tk.TclError:
+            pass
+        return "break"
+
+    def paste_text(self, event):
+        """ Вставляє текст із буфера обміну """
+        widget = event.widget
+        try:
+            clipboard_text = self.root.clipboard_get()
+            widget.insert(tk.INSERT, clipboard_text)
+        except tk.TclError:
+            pass
+        return "break"
 
     def generate_keys(self):
         self.crypto.generate_keys()
